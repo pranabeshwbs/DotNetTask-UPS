@@ -36,7 +36,7 @@ namespace EmpDetails
     /// </summary>
     public partial class MainWindow : Window
     {
-      private void GetData()
+      private void GetData() // For GET data into the GridView. 
     {
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri("https://gorest.co.in");
@@ -45,9 +45,8 @@ namespace EmpDetails
                 
                 if (response.IsSuccessStatusCode)
                 {
-                //var users = response.Content.ReadAsAsync<IEnumerable<DataModel>>().Result;
-                var result2 = response.Content.ReadAsAsync<DataModel>().Result;
-               datagrid.ItemsSource = result2.data;
+                 var result2 = response.Content.ReadAsAsync<DataModel>().Result;
+                 datagrid.ItemsSource = result2.data;
                 }
                 else
                 {
@@ -56,6 +55,7 @@ namespace EmpDetails
     }
         public MainWindow()
         {
+
             InitializeComponent();
             GetData();
         }
@@ -70,29 +70,38 @@ namespace EmpDetails
             employee.email = email.Text;
             employee.gender = gender.Text;
             employee.status = status.Text;
-            var response = client.PostAsJsonAsync("public-api/users", employee).Result;
 
-            if(response.IsSuccessStatusCode)
+            Test Obj = new Test();
+            int res = Obj.InsertTest(employee.id);
+            if (res == 0)
             {
-                MessageBox.Show("Employee Added");
-                id.Text = "";
-                name.Text = "";
-                email.Text = "";
-                gender.Text = "";
-                GetData();
+                var response = client.PostAsJsonAsync("public-api/users", employee).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Employee Added");
+                    id.Text = "";
+                    name.Text = "";
+                    email.Text = "";
+                    gender.Text = "";
+                    
+                }
+                else
+                {
+                    MessageBox.Show("Error" + response.StatusCode + " : Message - " + response.ReasonPhrase);
+                }
             }
             else
             {
-                MessageBox.Show("Error" + response.StatusCode + " : Message - " + response.ReasonPhrase);
-            }
+                MessageBox.Show("This Data has been already added");
+            } 
         }
-
         private void DeleteBtn_Click(object sender, RoutedEventArgs e)
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri("https://gorest.co.in/");
-            var id = id.text.trim();
-            var url = "public-api/users" + id;
+            var EmpID = int.Parse(id.Text);
+            var url = "public-api/users" + EmpID;
             HttpResponseMessage response = client.DeleteAsync(url).Result;
 
             if (response.IsSuccessStatusCode)
