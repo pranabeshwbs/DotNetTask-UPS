@@ -63,9 +63,11 @@ namespace EmpDetails
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri("https://gorest.co.in/");
+            client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "fa114107311259f5f33e70a5d85de34a2499b4401da069af0b1d835cd5ec0d56");
             var employee = new Datum();
-            employee.id = int.Parse(id.Text);
+            //employee.id = int.Parse(id.Text);
             employee.name = name.Text;
             employee.email = email.Text;
             employee.gender = gender.Text;
@@ -100,6 +102,8 @@ namespace EmpDetails
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri("https://gorest.co.in/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "fa114107311259f5f33e70a5d85de34a2499b4401da069af0b1d835cd5ec0d56");
             var EmpID = int.Parse(id.Text);
             var url = "public-api/users" + EmpID;
             HttpResponseMessage response = client.DeleteAsync(url).Result;
